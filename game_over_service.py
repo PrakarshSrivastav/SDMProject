@@ -17,6 +17,7 @@ class GameOverService:
         """
         if not self.game_over:
             self.missed_count += 1
+            print(f"Missed objects: {self.missed_count}/{self.max_misses}")
             if self.missed_count >= self.max_misses:
                 self.end_game()
 
@@ -41,3 +42,15 @@ class GameOverService:
         :return: True if the game is over, False otherwise.
         """
         return self.game_over
+
+    def check_object_missed(self, object_rect, screen_height):
+        """
+        Checks if an object has fallen past the bottom of the screen. If so, registers it as missed.
+        
+        :param object_rect: The pygame.Rect representing the object's position and size.
+        :param screen_height: The height of the game screen.
+        """
+        if object_rect.top > screen_height:
+            self.register_missed_object()
+            return True
+        return False
