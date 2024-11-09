@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 class GameOverService:
     def __init__(self, max_misses=3):
@@ -10,6 +11,8 @@ class GameOverService:
         self.max_misses = max_misses
         self.missed_count = 0
         self.game_over = False
+        self.font = pygame.font.Font(None, 74)
+        self.white_color = (255, 255, 255)
 
     def register_missed_object(self):
         """
@@ -17,7 +20,6 @@ class GameOverService:
         """
         if not self.game_over:
             self.missed_count += 1
-            print(f"Missed objects: {self.missed_count}/{self.max_misses}")
             if self.missed_count >= self.max_misses:
                 self.end_game()
 
@@ -26,7 +28,6 @@ class GameOverService:
         Ends the game by setting the game_over flag to True.
         """
         self.game_over = True
-        print("Game Over")
 
     def reset_game(self):
         """
@@ -54,3 +55,33 @@ class GameOverService:
             self.register_missed_object()
             return True
         return False
+
+    def handle_restart_or_quit_event(self, event):
+        """
+        Handles the restart or quit event if the game is over. Resets the game if 'R' is pressed, 
+        or quits the game if 'Q' is pressed.
+        
+        :param event: The pygame event to check.
+        """
+        if self.game_over:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    self.reset_game()
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    sys.exit()
+
+    def show_game_over_screen(self, screen):
+        """
+        Displays the "Game Over" screen on the provided surface.
+        
+        :param screen: The Pygame screen where the Game Over message is displayed.
+        """
+        game_over_text = self.font.render("Game Over", True, self.white_color)
+        restart_text = self.font.render("Press R to Restart", True, self.white_color)
+        quit_text = self.font.render("Press Q to Quit", True, self.white_color)
+        
+
+        screen.blit(game_over_text, (screen.get_width() // 2 - game_over_text.get_width() // 2, screen.get_height() // 3))
+        screen.blit(restart_text, (screen.get_width() // 2 - restart_text.get_width() // 2, screen.get_height() // 3 + 80))
+        screen.blit(quit_text, (screen.get_width() // 2 - quit_text.get_width() // 2, screen.get_height() // 3 + 160))
