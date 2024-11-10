@@ -2,6 +2,8 @@ import pygame
 import random
 import sys
 
+from game_over_services import GameOverService
+
 pygame.init()
 
 SCREEN_WIDTH = 800
@@ -13,6 +15,7 @@ SQUARE_SIZE = 30
 SPAWN_RATE = 100  # Frames between spawns
 FALL_SPEED = 3
 FPS = 60
+MAX_MISSES = 3
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -53,6 +56,7 @@ def main():
     spawn_counter = 0
     collision_counter = 0
     running = True
+    game_over_services = GameOverService(MAX_MISSES)
 
     while running:
         for event in pygame.event.get():
@@ -62,37 +66,45 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player_rect.x -= MOVE_SPEED
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player_rect.x += MOVE_SPEED
+            game_over_services.handle_restart_or_quit_event(event)
 
-        if player_rect.left < 0:
-            player_rect.left = 0
-        if player_rect.right > SCREEN_WIDTH:
-            player_rect.right = SCREEN_WIDTH
+        if not game_over_services.is_game_over():
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                player_rect.x -= MOVE_SPEED
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                player_rect.x += MOVE_SPEED
 
-        spawn_counter += 1
-        if spawn_counter >= SPAWN_RATE:
-            squares.append(Square())
-            spawn_counter = 0
+            if player_rect.left < 0:
+                player_rect.left = 0
+            if player_rect.right > SCREEN_WIDTH:
+                player_rect.right = SCREEN_WIDTH
 
-        for square in squares[:]:
-            square.move()
-            if square.is_off_screen():
-                squares.remove(square)
-            elif square.has_collided_with_player(player_rect):
-                squares.remove(square)
-                collision_counter += 1
+            spawn_counter += 1
+            if spawn_counter >= SPAWN_RATE:
+                squares.append(Square())
+                spawn_counter = 0
+
+            for square in squares[:]:
+                square.move()
+                if square.is_off_screen() and game_over_services.check_object_missed(pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT):
+                    squares.remove(square)
+                elif square.has_collided_with_player(player_rect):
+                    squares.remove(square)
+                    collision_counter += 1
 
         screen.fill(BLACK)
-        for square in squares:
-            square.draw(screen)
 
-        pygame.draw.rect(screen, WHITE, player_rect)
-        counter_text = SCORE_FONT.render(f"Collision Counter: {collision_counter}", True, WHITE)
-        screen.blit(counter_text, (10, 10))
+        if game_over_services.is_game_over():
+            game_over_services.show_game_over_screen(screen)
+            squares.clear()
+        else:
+            for square in squares:
+                square.draw(screen)
+
+            pygame.draw.rect(screen, WHITE, player_rect)
+            counter_text = SCORE_FONT.render(f"Collision Counter: {collision_counter}", True, WHITE)
+            screen.blit(counter_text, (10, 10))
 
         pygame.display.flip()
         clock.tick(FPS)
