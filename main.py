@@ -29,6 +29,20 @@ clock = pygame.time.Clock()
 player_rect = pygame.Rect(SCREEN_WIDTH // 2 - PLAYER_WIDTH // 2, SCREEN_HEIGHT - PLAYER_HEIGHT - 10, PLAYER_WIDTH,
                           PLAYER_HEIGHT)
 
+catch_sound = pygame.mixer.Sound('sounds/catch_object.wav')
+miss_sound = pygame.mixer.Sound('sounds/missed_object.wav')
+game_over_sound = pygame.mixer.Sound('sounds/game_over_sound.wav')
+game_background_sound = pygame.mixer.Sound('sounds/game_background.wav')
+
+catch_sound.set_volume(0.8)
+miss_sound.set_volume(0.8)
+game_over_sound.set_volume(0.8)
+game_background_sound.set_volume(0.2)
+
+pygame.mixer.music.load('sounds/game_background.wav')
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(-1, 0.0)
+
 
 class Square:
     def __init__(self):
@@ -57,6 +71,7 @@ def main():
     collision_counter = 0
     running = True
     game_over_services = GameOverService(MAX_MISSES)
+    game_over_sound_played = False
 
     while running:
         for event in pygame.event.get():
@@ -89,15 +104,21 @@ def main():
                 square.move()
                 if square.is_off_screen() and game_over_services.check_object_missed(pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT):
                     squares.remove(square)
+                    miss_sound.play()
                 elif square.has_collided_with_player(player_rect):
                     squares.remove(square)
                     collision_counter += 1
+                    catch_sound.play()
 
         screen.fill(BLACK)
 
         if game_over_services.is_game_over():
+            if not game_over_sound_played:
+                game_over_sound.play()
+                game_over_sound_played = True
             game_over_services.show_game_over_screen(screen)
             squares.clear()
+            collision_counter = 0
         else:
             for square in squares:
                 square.draw(screen)
