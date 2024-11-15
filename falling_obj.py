@@ -1,24 +1,11 @@
 import pygame
 import random
 import sys
+from constants import *
 
-# Initialize Pygame
+
 pygame.init()
-
-# Constants
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SQUARE_SIZE = 30
-SPAWN_RATE = 100  # Frames between spawns
-FALL_SPEED = 3
-FPS = 60
-
-# Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0)]  # Different colors for squares
-
-# Set up the display
+SCORE_FONT = pygame.font.Font(None, 36)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Falling Squares")
 clock = pygame.time.Clock()

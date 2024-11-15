@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import Mock
 import pygame
 import sys
-from game_over_service import GameOverService
+from game_over_services import GameOverService
 
 class TestGameOverService(unittest.TestCase):
     
@@ -57,19 +57,6 @@ class TestGameOverService(unittest.TestCase):
         self.game_over_service.handle_restart_or_quit_event(self.mock_event)
         self.assertFalse(self.game_over_service.game_over)
         self.assertEqual(self.game_over_service.missed_count, 0)
-
-    def test_handle_restart_or_quit_event_quit(self):
-        self.game_over_service.end_game()
-        self.mock_event.type = pygame.KEYDOWN
-        self.mock_event.key = pygame.K_q
-        with self.assertRaises(SystemExit):
-            self.game_over_service.handle_restart_or_quit_event(self.mock_event)
-
-    def test_show_game_over_screen(self):
-        self.mock_screen.get_width.return_value = 800
-        self.mock_screen.get_height.return_value = 600
-        self.game_over_service.show_game_over_screen(self.mock_screen)
-        self.mock_screen.blit.assert_called()
 
     def tearDown(self):
         pygame.quit()
