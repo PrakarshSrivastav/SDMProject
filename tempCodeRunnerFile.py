@@ -1,2 +1,2 @@
-def draw(self, surface):
-    #     pygame.draw.rect(surface, self.color, (self.x, self.y, SQUARE_SIZE, SQUARE_SIZE))
+PLAYER_WIDTH = 50
+PLAYER_HEIGHT = 50
