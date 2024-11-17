@@ -36,6 +36,15 @@ try:
 except pygame.error as e:
     print(f"Error loading background music: {e}")
 
+#added the below snippet in Scrum 2 for loading palyer image
+try:
+    player_image = pygame.image.load('player/player.png')
+    player_image = pygame.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+except pygame.error as e:
+    print(f"Error loading player image: {e}")
+    pygame.quit()
+    sys.exit()
+
 player_rect = pygame.Rect(
     SCREEN_WIDTH // 2 - PLAYER_WIDTH // 2,
     SCREEN_HEIGHT - PLAYER_HEIGHT - 10,
@@ -43,24 +52,33 @@ player_rect = pygame.Rect(
     PLAYER_HEIGHT
 )
 
+#added this for the laoding the food images SCRUM 2
 class Square:
+    # Load and scale images only once
+    images = [
+        pygame.transform.scale(
+            pygame.image.load(f'assets/obj{i}.png'),
+            (SQUARE_SIZE * 1.3, SQUARE_SIZE * 1.3)
+        ) for i in range(1, 17)
+    ]
+    
     def __init__(self):
-        self.x = random.randint(0, SCREEN_WIDTH - SQUARE_SIZE)
-        self.y = -SQUARE_SIZE  # Start above the screen
-        self.color = random.choice(COLORS)
+        self.image = random.choice(Square.images)
+        self.x = random.randint(0, SCREEN_WIDTH - int(SQUARE_SIZE * 1.3))
+        self.y = -int(SQUARE_SIZE * 1.3)  # Start above the screen
         self.speed = FALL_SPEED
 
     def move(self):
         self.y += self.speed
 
     def draw(self, surface):
-        pygame.draw.rect(surface, self.color, (self.x, self.y, SQUARE_SIZE, SQUARE_SIZE))
+        surface.blit(self.image, (self.x, self.y))
 
     def is_off_screen(self):
         return self.y > SCREEN_HEIGHT
 
     def has_collided_with_player(self, player):
-        square_rect = pygame.Rect(self.x, self.y, SQUARE_SIZE, SQUARE_SIZE)
+        square_rect = pygame.Rect(self.x, self.y, int(SQUARE_SIZE * 1.3), int(SQUARE_SIZE * 1.3))
         return square_rect.colliderect(player)
 
 def main():
@@ -142,7 +160,9 @@ def main():
                     for square in squares:
                         square.draw(screen)
 
-                    pygame.draw.rect(screen, WHITE, player_rect)
+                    #pygame.draw.rect(screen, WHITE, player_rect) -removed in sprint 2 to add the below line for the player character.
+                
+                    screen.blit(player_image, player_rect)
                     counter_text = SCORE_FONT.render(f"Score: {collision_counter}", True, WHITE)
                     screen.blit(counter_text, (10, 10))
 
