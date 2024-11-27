@@ -36,7 +36,7 @@ try:
 except pygame.error as e:
     print(f"Error loading background music: {e}")
 
-#added the below snippet in Scrum 2 for loading palyer image
+
 try:
     player_image = pygame.image.load('player/player.png')
     player_image = pygame.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -45,6 +45,13 @@ except pygame.error as e:
     pygame.quit()
     sys.exit()
 
+try:
+    heart_image = pygame.image.load('assets/heart.png')
+    heart_image = pygame.transform.scale(heart_image, (30, 30))
+except pygame.error as e:
+    print(f"Error loading heart image: {e}")
+    heart_image = None
+
 player_rect = pygame.Rect(
     SCREEN_WIDTH // 2 - PLAYER_WIDTH // 2,
     SCREEN_HEIGHT - PLAYER_HEIGHT - 10,
@@ -52,7 +59,7 @@ player_rect = pygame.Rect(
     PLAYER_HEIGHT
 )
 
-#added this for the laoding the food images SCRUM 2
+
 class Square:
     # Load and scale images only once
     images = [
@@ -81,6 +88,7 @@ class Square:
         square_rect = pygame.Rect(self.x, self.y, int(SQUARE_SIZE * 1.3), int(SQUARE_SIZE * 1.3))
         return square_rect.colliderect(player)
 
+
 def main():
     try:
         current_username = get_username(screen, clock)
@@ -97,6 +105,8 @@ def main():
         persistent_game_over = False
 
         while True:
+            remaining_lives = game_over_services.max_misses - game_over_services.missed_count
+
             if not persistent_game_over:
                 persistent_game_over = game_over_services.is_game_over()
 
@@ -139,8 +149,11 @@ def main():
                         square.move()
                         if square.is_off_screen():
                             squares.remove(square)
-                            if game_over_services.check_object_missed(pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT):
+                            if remaining_lives > 1 and game_over_services.check_object_missed(pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT):
                                 miss_sound.play()
+                            else:
+                                game_over_services.check_object_missed(pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT)
+
                         elif square.has_collided_with_player(player_rect):
                             squares.remove(square)
                             collision_counter += 1
@@ -148,6 +161,9 @@ def main():
                             catch_sound.play()
 
                 screen.fill(BLACK)
+                if heart_image:
+                    for i in range(remaining_lives):
+                        screen.blit(heart_image, (SCREEN_WIDTH - (i+1)*50, 10))
 
                 if game_over_services.is_game_over():
                     if not game_over_sound_played:
@@ -179,6 +195,7 @@ def main():
         print(f"An unexpected error occurred: {e}")
         pygame.quit()
         sys.exit()
+
 
 if __name__ == "__main__":
     main()
