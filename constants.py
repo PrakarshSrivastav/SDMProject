@@ -13,3 +13,13 @@ MAX_MISSES = 3
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0)]
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+
+#Changes made in implement game level branch
+# Level configuration
+LEVEL_1_THRESHOLD = 5
+LEVEL_2_THRESHOLD = 30
+LEVEL_SPEEDS = {
+    1: 3,  # Base speed for level 1
+    2: 6,  # Increased speed for level 2
+    3: 9   # Maximum speed for level 3
+}

@@ -36,7 +36,6 @@ try:
 except pygame.error as e:
     print(f"Error loading background music: {e}")
 
-#added the below snippet in Scrum 2 for loading palyer image
 try:
     player_image = pygame.image.load('player/player.png')
     player_image = pygame.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -52,9 +51,7 @@ player_rect = pygame.Rect(
     PLAYER_HEIGHT
 )
 
-#added this for the laoding the food images SCRUM 2
 class Square:
-    # Load and scale images only once
     images = [
         pygame.transform.scale(
             pygame.image.load(f'assets/obj{i}.png'),
@@ -62,11 +59,11 @@ class Square:
         ) for i in range(1, 17)
     ]
     
-    def __init__(self):
+    def __init__(self, current_level=1):
         self.image = random.choice(Square.images)
         self.x = random.randint(0, SCREEN_WIDTH - int(SQUARE_SIZE * 1.3))
-        self.y = -int(SQUARE_SIZE * 1.3)  # Start above the screen
-        self.speed = FALL_SPEED
+        self.y = -int(SQUARE_SIZE * 1.3)
+        self.speed = LEVEL_SPEEDS[current_level]
 
     def move(self):
         self.y += self.speed
@@ -80,6 +77,14 @@ class Square:
     def has_collided_with_player(self, player):
         square_rect = pygame.Rect(self.x, self.y, int(SQUARE_SIZE * 1.3), int(SQUARE_SIZE * 1.3))
         return square_rect.colliderect(player)
+
+def get_current_level(score):
+    if score < LEVEL_1_THRESHOLD:
+        return 1
+    elif score < LEVEL_2_THRESHOLD:
+        return 2
+    else:
+        return 3
 
 def main():
     try:
@@ -132,7 +137,8 @@ def main():
 
                     spawn_counter += 1
                     if spawn_counter >= SPAWN_RATE:
-                        squares.append(Square())
+                        current_level = get_current_level(collision_counter)
+                        squares.append(Square(current_level))
                         spawn_counter = 0
 
                     for square in squares[:]:
@@ -159,12 +165,13 @@ def main():
                 else:
                     for square in squares:
                         square.draw(screen)
-
-                    #pygame.draw.rect(screen, WHITE, player_rect) -removed in sprint 2 to add the below line for the player character.
-                
+                    
                     screen.blit(player_image, player_rect)
+                    current_level = get_current_level(collision_counter)
                     counter_text = SCORE_FONT.render(f"Score: {collision_counter}", True, WHITE)
+                    level_text = SCORE_FONT.render(f"Level: {current_level}", True, WHITE)
                     screen.blit(counter_text, (10, 10))
+                    screen.blit(level_text, (10, 50))
 
                 pygame.display.flip()
                 clock.tick(FPS)
