@@ -38,7 +38,7 @@ except pygame.error as e:
 
 # Load background image
 try:
-    background_image = pygame.image.load('assets\BG.jpg')  # Replace with your image filename
+    background_image = pygame.image.load('assets/BG.jpg')  # Replace with your image filename
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     print("Background image loaded successfully.")  # Debugging line
 except pygame.error as e:

@@ -13,7 +13,7 @@ def main_menu(screen, clock, font, game_over=False):
 
     # Load the background image
     try:
-        background_image = pygame.image.load('assets\BG.jpg')
+        background_image = pygame.image.load('assets/BG.jpg')
         background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     except pygame.error as e:
         print(f"Error loading background image: {e}")
@@ -99,7 +99,7 @@ def show_leaderboard(screen, clock, font, username):
 
     # Load the background image
     try:
-        background_image = pygame.image.load('assets\Box.jpg')
+        background_image = pygame.image.load('assets/Box.jpg')
         background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     except pygame.error as e:
         print(f"Error loading background image: {e}")
