@@ -11,6 +11,14 @@ def main_menu(screen, clock, font, game_over=False):
     button_spacing = 20
     start_y = SCREEN_HEIGHT // 2 - (button_height + button_spacing)
 
+    # Load the background image
+    try:
+        background_image = pygame.image.load('assets\BG.jpg')
+        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    except pygame.error as e:
+        print(f"Error loading background image: {e}")
+        background_image = None
+
     main_button_text = "Restart" if game_over else "Start Game"
     main_button = Button(
         main_button_text,
@@ -56,7 +64,11 @@ def main_menu(screen, clock, font, game_over=False):
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(BLACK)
+        # Draw the background image
+        if background_image:
+            screen.blit(background_image, (0, 0))
+        else:
+            screen.fill(BLACK)  # Fallback if the background image is missing
 
         for button in buttons:
             button.draw(screen, mouse_pos)
@@ -85,6 +97,14 @@ def show_leaderboard(screen, clock, font, username):
         font
     )
 
+    # Load the background image
+    try:
+        background_image = pygame.image.load('assets\Box.jpg')
+        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    except pygame.error as e:
+        print(f"Error loading background image: {e}")
+        background_image = None
+
     leaderboard_service = LeaderboardService()
     top_scores = leaderboard_service.get_top_scores()
     user_scores = leaderboard_service.get_user_high_scores(username)
@@ -98,7 +118,11 @@ def show_leaderboard(screen, clock, font, username):
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(BLACK)
+        # Draw the background image
+        if background_image:
+            screen.blit(background_image, (0, 0))
+        else:
+            screen.fill(BLACK)  # Fallback if the background image is missing
 
         title_surf = font.render("Leaderboard - Top 10 Scores", True, WHITE)
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, 50))
@@ -119,7 +143,6 @@ def show_leaderboard(screen, clock, font, username):
             user_score_surf = font.render(user_score_text, True, WHITE)
             user_score_rect = user_score_surf.get_rect(center=(SCREEN_WIDTH // 2, 450 + idx * 30))
             screen.blit(user_score_surf, user_score_rect)
-
 
         back_button.draw(screen, mouse_pos)
         if back_button.is_clicked(mouse_pos, mouse_pressed):

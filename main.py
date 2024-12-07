@@ -36,7 +36,16 @@ try:
 except pygame.error as e:
     print(f"Error loading background music: {e}")
 
+# Load background image
+try:
+    background_image = pygame.image.load('assets\BG.jpg')  # Replace with your image filename
+    background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    print("Background image loaded successfully.")  # Debugging line
+except pygame.error as e:
+    print(f"Error loading background image: {e}")
+    background_image = None
 
+# Load player image
 try:
     player_image = pygame.image.load('player/player.png')
     player_image = pygame.transform.scale(player_image, (PLAYER_WIDTH, PLAYER_HEIGHT))
@@ -45,6 +54,7 @@ except pygame.error as e:
     pygame.quit()
     sys.exit()
 
+# Load heart image
 try:
     heart_image = pygame.image.load('assets/heart.png')
     heart_image = pygame.transform.scale(heart_image, (30, 30))
@@ -68,7 +78,7 @@ class Square:
             (SQUARE_SIZE * 1.3, SQUARE_SIZE * 1.3)
         ) for i in range(1, 17)
     ]
-    
+
     def __init__(self):
         self.image = random.choice(Square.images)
         self.x = random.randint(0, SCREEN_WIDTH - int(SQUARE_SIZE * 1.3))
@@ -111,12 +121,18 @@ def main():
                 persistent_game_over = game_over_services.is_game_over()
 
             if state == GameState.MAIN_MENU:
+                if background_image:
+                    screen.blit(background_image, (0, 0))  # Draw background on main menu
                 state = main_menu(screen, clock, button_font, game_over=persistent_game_over)
+                pygame.display.flip()  # Update the screen
                 if state == GameState.GAME:
                     persistent_game_over = False
 
             elif state == GameState.LEADERBOARD:
+                if background_image:
+                    screen.blit(background_image, (0, 0))  # Draw background on leaderboard
                 show_leaderboard(screen, clock, button_font, current_username)
+                pygame.display.flip()  # Update the screen
                 state = GameState.MAIN_MENU
 
             elif state == GameState.GAME:
@@ -160,7 +176,9 @@ def main():
                             game_over_services.player_score = collision_counter
                             catch_sound.play()
 
-                screen.fill(BLACK)
+                if background_image:
+                    screen.blit(background_image, (0, 0))  # Draw background during the game
+
                 if heart_image:
                     for i in range(remaining_lives):
                         screen.blit(heart_image, (SCREEN_WIDTH - (i+1)*50, 10))
@@ -176,8 +194,6 @@ def main():
                     for square in squares:
                         square.draw(screen)
 
-                    #pygame.draw.rect(screen, WHITE, player_rect) -removed in sprint 2 to add the below line for the player character.
-                
                     screen.blit(player_image, player_rect)
                     counter_text = SCORE_FONT.render(f"Score: {collision_counter}", True, WHITE)
                     screen.blit(counter_text, (10, 10))
