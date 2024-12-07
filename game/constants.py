@@ -1,3 +1,4 @@
+
 GREY = (200, 200, 200)
 DARK_GREY = (50, 50, 50)
 SCREEN_WIDTH = 800
@@ -15,8 +16,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 
-LEVEL_1_THRESHOLD = 5
-LEVEL_2_THRESHOLD = 30
+LEVEL_1_THRESHOLD = 20
+LEVEL_2_THRESHOLD = 40
 LEVEL_SPEEDS = {
     1: 3,  # Base speed for level 1
     2: 6,  # Increased speed for level 2

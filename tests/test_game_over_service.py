@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock
 import pygame
-from game_over_services import GameOverService
+from services.game_over_services import GameOverService
 
 class TestGameOverService(unittest.TestCase):
     

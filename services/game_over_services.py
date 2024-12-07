@@ -1,6 +1,7 @@
 import pygame
 import sys
-from leaderboard_service import LeaderboardService
+from services.leaderboard_service import LeaderboardService
+
 
 class GameOverService:
     def __init__(self, max_misses=3, username: str = "Player"):

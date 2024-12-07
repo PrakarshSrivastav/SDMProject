@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 DATABASE_NAME = 'leaderboard.db'
 
+
 class LeaderboardService:
     def __init__(self, db_name: str = DATABASE_NAME, connection=None):
         self.db_name = db_name

@@ -1,5 +1,5 @@
 import unittest
-from leaderboard_service import LeaderboardService
+from services.leaderboard_service import LeaderboardService
 
 
 class TestLeaderboardService(unittest.TestCase):

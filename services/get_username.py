@@ -1,5 +1,5 @@
 import pygame
-from constants import *
+from game.constants import *
 import sys
 
 

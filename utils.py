@@ -1,5 +1,6 @@
 import pygame
-from constants import BLACK
+from game.constants import BLACK
+
 
 class Button:
     def __init__(self, text, x, y, width, height, inactive_color, active_color, font):

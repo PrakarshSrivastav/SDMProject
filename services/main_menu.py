@@ -1,9 +1,10 @@
 import pygame
-from leaderboard_service import LeaderboardService
-from constants import *
+from services.leaderboard_service import LeaderboardService
+from game.constants import *
 from utils import Button
 import sys
-from game_state import GameState
+from game.game_state import GameState
+
 
 def main_menu(screen, clock, font, game_over=False):
     button_width = 250
@@ -15,7 +16,7 @@ def main_menu(screen, clock, font, game_over=False):
     try:
         background_image = pygame.image.load('assets/BG.jpg')
         background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    except pygame.error as e:
+    except Exception as e:
         print(f"Error loading background image: {e}")
         background_image = None
 
@@ -97,14 +98,6 @@ def show_leaderboard(screen, clock, font, username):
         font
     )
 
-    # Load the background image
-    try:
-        background_image = pygame.image.load('assets/Box.jpg')
-        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    except pygame.error as e:
-        print(f"Error loading background image: {e}")
-        background_image = None
-
     leaderboard_service = LeaderboardService()
     top_scores = leaderboard_service.get_top_scores()
     user_scores = leaderboard_service.get_user_high_scores(username)
@@ -117,12 +110,6 @@ def show_leaderboard(screen, clock, font, username):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-        # Draw the background image
-        if background_image:
-            screen.blit(background_image, (0, 0))
-        else:
-            screen.fill(BLACK)  # Fallback if the background image is missing
 
         title_surf = font.render("Leaderboard - Top 10 Scores", True, WHITE)
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 4, 50))
