@@ -111,23 +111,23 @@ def show_leaderboard(screen, clock, font, username):
                 pygame.quit()
                 sys.exit()
 
-        title_surf = font.render("Leaderboard - Top 10 Scores", True, WHITE)
+        title_surf = font.render("Leaderboard - Top 10 Scores", True, BLACK)
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 4, 50))
         screen.blit(title_surf, title_rect)
 
         for idx, (uname, score) in enumerate(top_scores, start=1):
             score_text = f"{idx}. {uname} - {score}"
-            score_surf = font.render(score_text, True, WHITE)
+            score_surf = font.render(score_text, True, BLACK)
             score_rect = score_surf.get_rect(topleft=(50, 100 + idx * 30))
             screen.blit(score_surf, score_rect)
 
-        user_title_surf = font.render("Your High Scores", True, WHITE)
+        user_title_surf = font.render("Your High Scores", True, BLACK)
         user_title_rect = user_title_surf.get_rect(center=(3 * SCREEN_WIDTH // 4, 50))
         screen.blit(user_title_surf, user_title_rect)
 
         for idx, score in enumerate(user_scores[:10], start=1):
             user_score_text = f"{idx}. {score}"
-            user_score_surf = font.render(user_score_text, True, WHITE)
+            user_score_surf = font.render(user_score_text, True, BLACK)
             user_score_rect = user_score_surf.get_rect(topleft=(SCREEN_WIDTH // 2 + 50, 100 + idx * 30))
             screen.blit(user_score_surf, user_score_rect)
 

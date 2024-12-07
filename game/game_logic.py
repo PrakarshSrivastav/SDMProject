@@ -90,8 +90,8 @@ class Game:
                 self.screen.blit(self.heart_image, (SCREEN_WIDTH - (i + 1)*50, 10))
 
         if not self.game_over_services.game_over:
-            score_text = self.score_font.render(f"Score: {self.collision_counter}", True, WHITE)
-            level_text = self.score_font.render(f"Level: {self.get_current_level()}", True, WHITE)
+            score_text = self.score_font.render(f"Score: {self.collision_counter}", True, BLACK)
+            level_text = self.score_font.render(f"Level: {self.get_current_level()}", True, BLACK)
             self.screen.blit(score_text, (10, 10))
             self.screen.blit(level_text, (10, 50))
 
