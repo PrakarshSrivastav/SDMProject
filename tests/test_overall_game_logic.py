@@ -1,7 +1,16 @@
 import unittest
 from unittest.mock import Mock, patch
 import pygame
-from main import Square, player_rect, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.square import Square
+from game.constants import SCREEN_HEIGHT, SCREEN_WIDTH, PLAYER_WIDTH, PLAYER_HEIGHT
+
+player_rect = pygame.Rect(
+    SCREEN_WIDTH // 2 - PLAYER_WIDTH // 2,
+    SCREEN_HEIGHT - PLAYER_HEIGHT - 10,
+    PLAYER_WIDTH,
+    PLAYER_HEIGHT
+)
+
 
 class TestGameLogic(unittest.TestCase):
 
@@ -55,6 +64,7 @@ class TestGameLogic(unittest.TestCase):
         if self.test_square.is_off_screen():
             miss_sound.play()
             miss_sound.play.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
