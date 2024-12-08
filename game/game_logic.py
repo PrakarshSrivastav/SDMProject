@@ -114,7 +114,7 @@ class Game:
                 self.squares.remove(square)
                 missed = self.game_over_services.check_object_missed(
                     pygame.Rect(square.x, square.y, SQUARE_SIZE, SQUARE_SIZE), SCREEN_HEIGHT)
-                if missed:
+                if missed and not self.game_over_services.game_over:
                     self.play_sound('miss')
             elif square.has_collided_with_player(self.player.rect):
                 self.handle_collision(square)
