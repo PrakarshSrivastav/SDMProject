@@ -3,8 +3,6 @@
 
 **Food Catcher** is a Python-based game where players catch falling food items to score points. With increasing speed and multiple objects to manage, the game offers a challenging yet entertaining experience. If more than three food items touch the ground, the game ends.
 
-**Food Catcher** is a simple yet engaging game, designed to provide a visually and mechanically polished experience. Perfect for testing reflexes and competing for high scores.
-
 ## **Features**
 
 - **Game Modes**
@@ -32,6 +30,7 @@
 
 - **Python Language**: Used to implement the game logic.
 - **Pygame Library**: Provides graphics, user interaction, and sound management.
+- **SQL Lite**: Used to store the top 10 high score as the database
 
 ## **Setup Instructions**
 

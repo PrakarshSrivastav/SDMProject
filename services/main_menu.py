@@ -122,23 +122,23 @@ def show_leaderboard(screen, clock, font, username):
         else:
             screen.fill(BLACK)
 
-        title_surf = font.render("Leaderboard - Top 10 Scores", True, BLACK)
+        title_surf = font.render("Leaderboard - Top 10 Scores", True, WHITE)
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 4, 50))
         screen.blit(title_surf, title_rect)
 
         for idx, (uname, score) in enumerate(top_scores, start=1):
             score_text = f"{idx}. {uname} - {score}"
-            score_surf = font.render(score_text, True, BLACK)
+            score_surf = font.render(score_text, True, WHITE)
             score_rect = score_surf.get_rect(topleft=(50, 100 + idx * 30))
             screen.blit(score_surf, score_rect)
 
-        user_title_surf = font.render("Your High Scores", True, BLACK)
+        user_title_surf = font.render("Your High Scores", True, WHITE)
         user_title_rect = user_title_surf.get_rect(center=(3 * SCREEN_WIDTH // 4, 50))
         screen.blit(user_title_surf, user_title_rect)
 
         for idx, score in enumerate(user_scores[:10], start=1):
             user_score_text = f"{idx}. {score}"
-            user_score_surf = font.render(user_score_text, True, BLACK)
+            user_score_surf = font.render(user_score_text, True, WHITE)
             user_score_rect = user_score_surf.get_rect(topleft=(SCREEN_WIDTH // 2 + 50, 100 + idx * 30))
             screen.blit(user_score_surf, user_score_rect)
 
@@ -155,6 +155,12 @@ def pause_menu(screen, clock, font):
     button_height = 50
     button_spacing = 20
     start_y = SCREEN_HEIGHT // 2 - (button_height + button_spacing)
+    try:
+        background_image = pygame.image.load('assets/BG.jpg')
+        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    except Exception as e:
+        print(f"Error loading background image: {e}")
+        background_image = None
 
     resume_button = Button(
         "Resume Game",
@@ -178,7 +184,7 @@ def pause_menu(screen, clock, font):
                 pygame.quit()
                 sys.exit()
 
-        screen.fill(BLACK)  # Pause menu background
+        screen.blit(background_image, (0, 0))  # Pause menu background
         for button in buttons:
             button.draw(screen, mouse_pos)
             if button.is_clicked(mouse_pos, mouse_pressed):
