@@ -65,11 +65,10 @@ def main_menu(screen, clock, font, game_over=False):
                 pygame.quit()
                 sys.exit()
 
-        # Draw the background image
         if background_image:
             screen.blit(background_image, (0, 0))
         else:
-            screen.fill(BLACK)  # Fallback if the background image is missing
+            screen.fill(BLACK)
 
         for button in buttons:
             button.draw(screen, mouse_pos)
@@ -102,6 +101,13 @@ def show_leaderboard(screen, clock, font, username):
     top_scores = leaderboard_service.get_top_scores()
     user_scores = leaderboard_service.get_user_high_scores(username)
 
+    try:
+        background_image = pygame.image.load('assets/Box.jpg')
+        background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    except Exception as e:
+        print(f"Error loading background image: {e}")
+        background_image = None
+
     while True:
         mouse_pos = pygame.mouse.get_pos()
         mouse_pressed = pygame.mouse.get_pressed()
@@ -110,6 +116,11 @@ def show_leaderboard(screen, clock, font, username):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+        if background_image:
+            screen.blit(background_image, (0, 0))
+        else:
+            screen.fill(BLACK)
 
         title_surf = font.render("Leaderboard - Top 10 Scores", True, BLACK)
         title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 4, 50))
