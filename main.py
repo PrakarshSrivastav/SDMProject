@@ -17,6 +17,7 @@ def main():
     username = get_username(screen, clock)
     state = GameState.MAIN_MENU
     game = Game(screen, clock, username, score_font)
+    game_over = False
 
     while True:
         for event in pygame.event.get():
@@ -28,7 +29,7 @@ def main():
                     state = GameState.PAUSE
 
         if state == GameState.MAIN_MENU:
-            state = main_menu(screen, clock, pygame.font.Font(None, 36))
+            state = main_menu(screen, clock, pygame.font.Font(None, 36), game_over)
         elif state == GameState.LEADERBOARD:
             show_leaderboard(screen, clock, pygame.font.Font(None, 36), username)
             state = GameState.MAIN_MENU
@@ -39,6 +40,7 @@ def main():
             pygame.display.flip()
             clock.tick(FPS)
         elif state == GameState.GAME_OVER:
+            game_over = True
             show_leaderboard(screen, clock, pygame.font.Font(None, 36), username)
             state = GameState.MAIN_MENU
             game = Game(screen, clock, username, score_font)
