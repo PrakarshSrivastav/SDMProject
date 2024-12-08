@@ -137,3 +137,44 @@ def show_leaderboard(screen, clock, font, username):
 
         pygame.display.flip()
         clock.tick(FPS)
+
+
+def pause_menu(screen, clock, font):
+    button_width = 250
+    button_height = 50
+    button_spacing = 20
+    start_y = SCREEN_HEIGHT // 2 - (button_height + button_spacing)
+
+    resume_button = Button(
+        "Resume Game",
+        SCREEN_WIDTH // 2 - button_width // 2,
+        start_y,
+        button_width,
+        button_height,
+        WHITE,
+        GREY,
+        font
+    )
+
+    buttons = [resume_button]
+
+    while True:
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_pressed = pygame.mouse.get_pressed()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        screen.fill(BLACK)  # Pause menu background
+        for button in buttons:
+            button.draw(screen, mouse_pos)
+            if button.is_clicked(mouse_pos, mouse_pressed):
+                if button.text == "Resume Game":
+                    return GameState.GAME
+                elif button.text == "Quit to Main Menu":
+                    return GameState.MAIN_MENU
+
+        pygame.display.flip()
+        clock.tick(FPS)

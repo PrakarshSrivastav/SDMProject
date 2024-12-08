@@ -5,3 +5,4 @@ class GameState(Enum):
     GAME = auto()
     LEADERBOARD = auto()
     GAME_OVER = auto()
+    PAUSE = auto()
